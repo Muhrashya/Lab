@@ -6,62 +6,56 @@ import {GLTFLoader} from "./three.js/examples/jsm/loaders/GLTFLoader.js"
 
 var scene, FixedCamera, FreeCamera, currentCam, control, renderer, loader
 
-function Skybox() {
-    let geometry = new THREE.BoxGeometry(1000,1000,1000)
-    let loader = new THREE.TextureLoader()
-
-    let right = loader.load("./assets/skybox/dawn_right.png")
-    let left = loader.load("./assets/skybox/dawn_left.png")
-    let top = loader.load("./assets/skybox/dawn_top.png")
-    let bottom = loader.load("./assets/skybox/dawn_bottom.png")
-    let front = loader.load("./assets/skybox/dawn_front.png")
-    let back = loader.load("./assets/skybox/dawn_back.png")
-
-    let material = [
-        new THREE.MeshBasicMaterial({
-            map: right,
-            side: THREE.BackSide
-        }),
-        new THREE.MeshBasicMaterial({
-            map: left,
-            side: THREE.BackSide
-        }),
-        new THREE.MeshBasicMaterial({
-            map: top,
-            side: THREE.BackSide
-        }),
-        new THREE.MeshBasicMaterial({
-            map: bottom,
-            side: THREE.BackSide
-        }),
-        new THREE.MeshBasicMaterial({
-            map: front,
-            side: THREE.BackSide
-        }),
-        new THREE.MeshBasicMaterial({
-            map: back,
-            side: THREE.BackSide
-        })
-    ]
-    let mesh = new THREE.Mesh(geometry,material)
-    scene.add(mesh)
+function AmbientLight() {
+    let light = new THREE.AmbientLight("#404040")
+    scene.add(light)
 }
 
-function ground() {
+const createSpot1 = () => {
+    const spot1 = new THREE.SpotLight("#ffffff",1,300)
+    spot1.position.set(-100,0,100)
+    spot1.lookAt(0,50,0)
+    spot1.castShadow = true
+    scene.add(spot1)
+}
+const createSpot2 = () => {
+    const spot2 = new THREE.SpotLight("#ffffff",1,300)
+    spot2.position.set(-100,0,-100)
+    spot2.lookAt(0,50,0)
+    spot2.castShadow = true
+    scene.add(spot2)
+}
+const createSpot3 = () => {
+    const spot3 = new THREE.SpotLight("#ffffff",0.5,300)
+    spot3.position.set(-100,0,-100)
+    spot3.lookAt(0,0,0)
+    spot3.castShadow = true
+    spot3.angle = Math.PI/4 + Math.PI/6
+    scene.add(spot3)
+}
+
+function spotsL() {
+    let spotter = new THREE.SpotLight("#ffffff",0.5,300)
+    spotter.position.set(0,200,0)
+    spotter.lookAt(0,0,0)
+    spotter.angle = Math.PI/4 + Math.PI/6
+    spotter.castShadow = true
+    scene.add(spotter)
+}
+
+function createPlane() {
     let geometry = new THREE.PlaneGeometry(1000,1000,150)
     let material = new THREE.MeshStandardMaterial({
-        color: "#8c3b0c",
-        side: THREE.DoubleSide
+        color: "#8c3b0c"
     })
     let mesh = new THREE.Mesh(geometry,material)
     mesh.position.set(0, -5, 0)
-    mesh.rotation.set(-Math.PI/2,0,0)
+    mesh.rotation.x = -Math.PI/2,0,0
     mesh.receiveShadow = true
-
     scene.add(mesh)
 }
 
-function ballon(){
+function balonUdara(){
     let loader = new GLTFLoader()
 
     loader.load('./assets/model/scene.gltf',
@@ -73,26 +67,82 @@ function ballon(){
             if (node.isMesh || node.isLight) node.castShadow = true;
             if (node.isMesh || node.isLight) node.receiveShadow = true;
         });
-
-        // console.log(gltf)
         scene.add(model)
         return model
     })
 }
 
-function crate(w,h,d,pX,pY,pZ,rX,rY,rZ,load) {
-    let geometry = new THREE.BoxGeometry(w,h,d)
-    let material = new THREE.MeshPhongMaterial({
-        map: loader.load(load)
-    })
-    let mesh = new THREE.Mesh(geometry, material)
-    mesh.position.set(pX,pY,pZ)
-    mesh.rotation.set(rX,rY,rZ)
-    mesh.castShadow = true
-    mesh.receiveShadow = true
+function createCrateA1(){
+    const geometry = new THREE.BoxGeometry(10,10,10)
+    const texture = loader.load("./assets/texture/crate1.jpeg")
+    const material = new THREE.MeshPhongMaterial({
+        side : THREE.DoubleSide,
+        map : texture
 
+    })
+    const mesh = new THREE.Mesh(geometry, material)
+    mesh.position.set(-30,0,-40)
+    mesh.rotation.x = 0
+    mesh.receiveShadow = true
+    mesh.castShadow= true
     scene.add(mesh)
-    return mesh
+}
+
+function createCrateA2(){
+    const geometry = new THREE.BoxGeometry(5,5,5)
+    const texture = loader.load("./assets/texture/crate1.jpeg")
+    const material = new THREE.MeshPhongMaterial({
+        side : THREE.DoubleSide,
+        map : texture
+    })
+    const mesh = new THREE.Mesh(geometry, material)
+    mesh.position.set(-30,-2,-48)
+    mesh.rotation.x = Math.PI/6
+    mesh.receiveShadow = true
+    mesh.castShadow= true
+    scene.add(mesh)
+}
+function createCrateA3(){
+    const geometry = new THREE.BoxGeometry(10,15,10)
+    const texture = loader.load("./assets/texture/crate1.jpeg")
+    const material = new THREE.MeshPhongMaterial({
+        side : THREE.DoubleSide,
+        map : texture
+    })
+    const mesh = new THREE.Mesh(geometry, material)
+    mesh.position.set(-40,2.5,30)
+    mesh.rotation.y = -Math.PI/4
+    mesh.receiveShadow = true
+    mesh.castShadow= true
+    scene.add(mesh)
+}
+function createCrateB1(){
+    const geometry = new THREE.BoxGeometry(20,20,20)
+    const texture = loader.load("./assets/texture/crate2.jpeg")
+    const material = new THREE.MeshPhongMaterial({
+        side : THREE.DoubleSide,
+        map : texture
+    })
+    const mesh = new THREE.Mesh(geometry, material)
+    mesh.position.set(30,5,40)
+    mesh.rotation.y = Math.PI/3
+    mesh.receiveShadow = true
+    mesh.castShadow= true
+    scene.add(mesh)
+}
+function createCrateB2(){
+    const geometry = new THREE.BoxGeometry(40,15,30)
+    const texture = loader.load("./assets/texture/crate2.jpeg")
+    const material = new THREE.MeshPhongMaterial({
+        side : THREE.DoubleSide,
+        map : texture
+    })
+    const mesh = new THREE.Mesh(geometry, material)
+    mesh.position.set(30,2.5,-60)
+    mesh.rotation.y = -Math.PI/6
+    mesh.receiveShadow = true
+    mesh.castShadow= true
+    scene.add(mesh)
 }
 
 function createTire1(){
@@ -212,7 +262,48 @@ function buttonClick() {
     return mesh
 }
 
-function text() {
+function createSkybox() {
+    let geometry = new THREE.BoxGeometry(1000,1000,1000)
+    let loader = new THREE.TextureLoader()
+
+    let right = loader.load("./assets/skybox/dawn_right.png")
+    let left = loader.load("./assets/skybox/dawn_left.png")
+    let top = loader.load("./assets/skybox/dawn_top.png")
+    let bottom = loader.load("./assets/skybox/dawn_bottom.png")
+    let front = loader.load("./assets/skybox/dawn_front.png")
+    let back = loader.load("./assets/skybox/dawn_back.png")
+
+    let material = [
+        new THREE.MeshBasicMaterial({
+            map: right,
+            side: THREE.BackSide
+        }),
+        new THREE.MeshBasicMaterial({
+            map: left,
+            side: THREE.BackSide
+        }),
+        new THREE.MeshBasicMaterial({
+            map: top,
+            side: THREE.BackSide
+        }),
+        new THREE.MeshBasicMaterial({
+            map: bottom,
+            side: THREE.BackSide
+        }),
+        new THREE.MeshBasicMaterial({
+            map: front,
+            side: THREE.BackSide
+        }),
+        new THREE.MeshBasicMaterial({
+            map: back,
+            side: THREE.BackSide
+        })
+    ]
+    let mesh = new THREE.Mesh(geometry,material)
+    scene.add(mesh)
+}
+
+function createText() {
     let loader = new FontLoader()
     loader.load('./three.js/examples/fonts/helvetiker_bold.typeface.json',
     function (font1){
@@ -241,26 +332,7 @@ function text() {
     })
 }
 
-function AmbientLight() {
-    let light = new THREE.AmbientLight("#404040")
-    scene.add(light)
-}
 
-function Spotlight(x,y,z) {
-    let light = new THREE.SpotLight("#ffffff",1,300)
-    light.position.set(x,y,z)
-    light.lookAt(0,50,0)
-    light.castShadow = true
-    scene.add(light)
-}
-
-function Spotlight3() {
-    let light = new THREE.SpotLight("#ffffff",0.5,300,Math.PI/4 + Math.PI/6)
-    light.position.set(0,200,0)
-    light.lookAt(0,0,0)
-    light.castShadow = true
-    scene.add(light)
-}
 
 function init() {
     scene = new THREE.Scene()
@@ -290,11 +362,14 @@ function init() {
     control = new OrbitControls(FreeCamera, renderer.domElement)
 
     AmbientLight()
-    Spotlight(-100,0,100)
-    Spotlight(-100,0,-100)
-    Spotlight3()
-    Skybox()
-    ground()
+    createSpot1()
+    createSpot2()
+    createSpot3()
+    balonUdara()
+    spotsL()
+    createSkybox()
+    createPlane()
+    createText()
     createTire1()
     createTire2()
     createTire3()
@@ -302,77 +377,19 @@ function init() {
     createTire5()
     createPole1()
     createPole2()
-
-    var hotairballon = ballon()
-        window.hotairballon = hotairballon
-
-    -48,
-        Math.PI/6,0,crate(10,10,10,
-        -30,0,-40,
-        0,0,0,
-        "./assets/texture/crate1.jpeg")
-    crate(5,5,5,
-        -30,-2,0,
-        "./assets/texture/crate1.jpeg")
-    crate(10,15,10,
-        -40,2.5,30,
-        0,-Math.PI/4,0,
-        "./assets/texture/crate1.jpeg")
-
-    crate(20,20,20,
-        30,5,40,
-        0,Math.PI/3,0,
-        "./assets/texture/crate2.jpeg")
-    crate(40,15,30,
-        30,2.5,-60,
-        0,-Math.PI/6,0,
-        "./assets/texture/crate2.jpeg")
-
-
+    createCrateA1()
+    createCrateA2()
+    createCrateA3()
+    createCrateB1()
+    createCrateB2()
     buttonBox()
+
     var button = buttonClick()
         window.button = button
 
-    text()
 }
 
-var animationFrame
-let i = -Math.PI/6
-function animationPole() {
-    let createPole1 = window.createPole1
-    let createPole2 = window.createPole2
-    animationFrame = requestAnimationFrame(animationPole)
-
-    i += 0.01
-    if(i < 0) {
-        createPole1.rotation.x += 0.01
-        createPole2.rotation.x += -0.01
-    } else {
-        cancelAnimationFrame(animationFrame)
-    }
-
-    console.log("yes")
-    renderer.render(scene, currentCam)
-}
-
-let j = 0
-function ballonAnimate() {
-    requestAnimationFrame(ballonAnimate)
-    let ballon = window.hotairballon
-    
-    j += 1
-    if(i < 1000) {
-        ballon.position.y += 1
-    } else {
-        cancelAnimationFrame(animationFrame)
-    }
-    
-    console.log("yes")
-    renderer.render(scene, currentCam);
-}
-
-
-function moveCam(event){
+function camAnimate(event){
     let keyCode = event.keyCode
     if (keyCode == 32) 
     {
@@ -388,33 +405,29 @@ function moveCam(event){
 const mouse = new THREE.Vector2()
 const raycaster = new THREE.Raycaster()
 
-document.addEventListener('mousemove', (event) => {
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-})
-
 var ready = false
-function btnAnimate() {
+function buttonClk() {
     raycaster.setFromCamera(mouse,currentCam)
     const intersects = raycaster.intersectObject(window.button)
     if (intersects.length > 0) {
         const object = intersects[0].object;
         if(ready){
-            console.log("Ballons")
             object.material.color.set("#32cd32");
             ready = false
         } else {
-            console.log("Poles")
-            animationPole()
             object.material.color.set("#fada5e");
-            console.log("done")
             ready = true
         }
     }
 }
 
-window.addEventListener('keydown', moveCam)
-window.addEventListener('click', btnAnimate)
+document.addEventListener('mousemove', (event) => {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+ })
+
+window.addEventListener('keydown', camAnimate)
+window.addEventListener('click', buttonClk)
 
 function render() {
     control.update()
