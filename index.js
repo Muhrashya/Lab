@@ -42,7 +42,7 @@ function createPlane(){
     })
     const mesh = new THREE.Mesh(geometry,material)
     mesh.position.set(0, -5, 0)
-    mesh.rotation.x = -Math.PI/2,0,0
+    mesh.rotation.x = -Math.PI/2
     mesh.receiveShadow = true
     scene.add(mesh)
 }
@@ -211,20 +211,20 @@ function createPole2(){
 }
 
 
-function buttonBox(){
+function createButtonBox(){
     const geometry = new THREE.BoxGeometry(10,16.5,14.5)
     const material = new THREE.MeshPhongMaterial({
         color: "#848482"
     })
     const mesh = new THREE.Mesh(geometry, material)
     mesh.position.set(-43, 3, 65)
-    mesh.rotation.set(0, -Math.PI/6, 0)
+    mesh.rotation.y = -Math.PI/6
     mesh.castShadow = true
     mesh.receiveShadow = true
     scene.add(mesh)
 }
 
-function buttonClick(){
+function createButton(){
     const geometry = new THREE.SphereGeometry(4.5,32,16)
     const material = new THREE.MeshPhongMaterial({
         color: "#dc143c"
@@ -257,7 +257,7 @@ function createText(){
                 })]
             const mesh = new THREE.Mesh(geometry,material)
             mesh.position.set(-35, 25, 50)
-            mesh.rotation.set(0, Math.PI*3 + 1, 0)
+            mesh.rotation.y = Math.PI*3 + 1
             mesh.castShadow = true
             mesh.receiveShadow = true
             scene.add(mesh)
@@ -268,11 +268,10 @@ function createText(){
 
 function balonUdara(){
     const loader = new GLTFLoader()
-
     loader.load('./assets/model/scene.gltf',
     function(gltf) {
         const model = gltf.scene
-        model.scale.setScalar(1/11)
+        model.scale.setScalar(0.1)
         gltf.scene.traverse( function (node) {
             if (node.isMesh || node.isLight) node.castShadow = true;
             if (node.isMesh || node.isLight) node.receiveShadow = true;
@@ -367,8 +366,8 @@ function init(){
     createPole1()
     createPole2()
 
-    buttonBox()
-    var button = buttonClick()
+    createButtonBox()
+    var button = createButton()
         window.button = button
 
     balonUdara()
