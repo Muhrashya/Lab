@@ -1,13 +1,13 @@
 import * as THREE from "./three.js/build/three.module.js"
+import {OrbitControls} from "./three.js/examples/jsm/controls/OrbitControls.js"
 import {GLTFLoader} from "./three.js/examples/jsm/loaders/GLTFLoader.js"
 import {TextGeometry} from "./three.js/examples/jsm/geometries/TextGeometry.js"
-import {OrbitControls} from "./three.js/examples/jsm/controls/OrbitControls.js"
 import {FontLoader} from "./three.js/examples/jsm/loaders/FontLoader.js"
 
 var scene, renderer, camera, freeCamera, currentCamera, control, loader
 
 function ambientLight(){
-    let light = new THREE.AmbientLight("#404040")
+    const light = new THREE.AmbientLight("#404040")
     scene.add(light)
 }
 
@@ -25,30 +25,22 @@ const createSpot2 = () => {
     spot2.castShadow = true
     scene.add(spot2)
 }
-const createSpot3 = () => {
+
+function createSpot3(){
     const spot3 = new THREE.SpotLight("#ffffff",0.5,300)
-    spot3.position.set(-100,0,-100)
+    spot3.position.set(0,200,0)
     spot3.lookAt(0,0,0)
-    spot3.castShadow = true
     spot3.angle = Math.PI/4 + Math.PI/6
+    spot3.castShadow = true
     scene.add(spot3)
 }
 
-function spotsL(){
-    let spotter = new THREE.SpotLight("#ffffff",0.5,300)
-    spotter.position.set(0,200,0)
-    spotter.lookAt(0,0,0)
-    spotter.angle = Math.PI/4 + Math.PI/6
-    spotter.castShadow = true
-    scene.add(spotter)
-}
-
 function createPlane(){
-    let geometry = new THREE.PlaneGeometry(1000,1000,150)
-    let material = new THREE.MeshStandardMaterial({
+    const geometry = new THREE.PlaneGeometry(1000,1000,150)
+    const material = new THREE.MeshStandardMaterial({
         color: "#8c3b0c"
     })
-    let mesh = new THREE.Mesh(geometry,material)
+    const mesh = new THREE.Mesh(geometry,material)
     mesh.position.set(0, -5, 0)
     mesh.rotation.x = -Math.PI/2,0,0
     mesh.receiveShadow = true
@@ -62,11 +54,10 @@ function createCrateA1(){
     const material = new THREE.MeshPhongMaterial({
         side : THREE.DoubleSide,
         map : texture
-        
     })
     const mesh = new THREE.Mesh(geometry, material)
     mesh.position.set(-30,0,-40)
-    mesh.rotation.x = 0
+    mesh.rotation.set(0,0,0)
     mesh.receiveShadow = true
     mesh.castShadow= true
     scene.add(mesh)
@@ -221,11 +212,11 @@ function createPole2(){
 
 
 function buttonBox(){
-    let geometry = new THREE.BoxGeometry(10,16.5,14.5)
-    let material = new THREE.MeshPhongMaterial({
+    const geometry = new THREE.BoxGeometry(10,16.5,14.5)
+    const material = new THREE.MeshPhongMaterial({
         color: "#848482"
     })
-    let mesh = new THREE.Mesh(geometry, material)
+    const mesh = new THREE.Mesh(geometry, material)
     mesh.position.set(-43, 3, 65)
     mesh.rotation.set(0, -Math.PI/6, 0)
     mesh.castShadow = true
@@ -235,11 +226,11 @@ function buttonBox(){
 }
 
 function buttonClick(){
-    let geometry = new THREE.SphereGeometry(4.5,32,16)
-    let material = new THREE.MeshPhongMaterial({
+    const geometry = new THREE.SphereGeometry(4.5,32,16)
+    const material = new THREE.MeshPhongMaterial({
         color: "#dc143c"
         })
-        let mesh = new THREE.Mesh(geometry, material)
+        const mesh = new THREE.Mesh(geometry, material)
         mesh.position.set(-46, 3, 63)
         mesh.castShadow = true
         mesh.receiveShadow = true
@@ -249,15 +240,15 @@ function buttonClick(){
     }
 
     function createText(){
-        let loader = new FontLoader()
+        const loader = new FontLoader()
         loader.load('./three.js/examples/fonts/helvetiker_bold.typeface.json',
         function (font1){
-            let geometry = new TextGeometry('Click Me!',{
+            const geometry = new TextGeometry('Click Me!',{
                 font:font1,
                 size:7,
                 height:9
             })
-            let material = [
+            const material = [
                 new THREE.MeshPhongMaterial({
                     color: "#FF5B00",
                     side: THREE.FrontSide
@@ -266,7 +257,7 @@ function buttonClick(){
                     color: "#990000",
                     side: THREE.BackSide
                 })]
-            let mesh = new THREE.Mesh(geometry,material)
+            const mesh = new THREE.Mesh(geometry,material)
             mesh.position.set(-35, 25, 50)
             mesh.rotation.set(0, Math.PI*3 + 1, 0)
             mesh.castShadow = true
@@ -279,11 +270,11 @@ function buttonClick(){
 
 
 function balonUdara(){
-    let loader = new GLTFLoader()
+    const loader = new GLTFLoader()
 
     loader.load('./assets/model/scene.gltf',
     function(gltf) {
-        let model = gltf.scene
+        const model = gltf.scene
         model.scale.setScalar(1/11)
         model.position.y = 1
         gltf.scene.traverse( function (node) {
@@ -296,17 +287,17 @@ function balonUdara(){
 }
 
 function createSkybox(){
-    let geometry = new THREE.BoxGeometry(1000,1000,1000)
-    let loader = new THREE.TextureLoader()
+    const geometry = new THREE.BoxGeometry(1000,1000,1000)
+    const loader = new THREE.TextureLoader()
+
+    const right = loader.load("./assets/skybox/dawn_right.png")
+    const left = loader.load("./assets/skybox/dawn_left.png")
+    const top = loader.load("./assets/skybox/dawn_top.png")
+    const bottom = loader.load("./assets/skybox/dawn_bottom.png")
+    const front = loader.load("./assets/skybox/dawn_front.png")
+    const back = loader.load("./assets/skybox/dawn_back.png")
     
-    let right = loader.load("./assets/skybox/dawn_right.png")
-    let left = loader.load("./assets/skybox/dawn_left.png")
-    let top = loader.load("./assets/skybox/dawn_top.png")
-    let bottom = loader.load("./assets/skybox/dawn_bottom.png")
-    let front = loader.load("./assets/skybox/dawn_front.png")
-    let back = loader.load("./assets/skybox/dawn_back.png")
-    
-    let material = [
+    const material = [
         new THREE.MeshBasicMaterial({
             map: right,
             side: THREE.BackSide
@@ -332,7 +323,7 @@ function createSkybox(){
             side: THREE.BackSide
         })
     ]
-    let mesh = new THREE.Mesh(geometry,material)
+    const mesh = new THREE.Mesh(geometry,material)
     scene.add(mesh)
 }
 
@@ -386,7 +377,6 @@ function init(){
     createSpot1()
     createSpot2()
     createSpot3()
-    spotsL()
     createSkybox()
     
     var button = buttonClick()
@@ -394,7 +384,7 @@ function init(){
 }
 
 function camAnimate(event){
-    let keyCode = event.keyCode
+    const keyCode = event.keyCode
     if (keyCode == 32) 
     {
         if (currentCamera == camera) {
@@ -406,11 +396,11 @@ function camAnimate(event){
     }
 }
 
-const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
+const raycaster = new THREE.Raycaster()
 
 var ready = false
-function buttonClk(){
+function clickButton(){
     raycaster.setFromCamera(mouse,currentCamera)
     const intersects = raycaster.intersectObject(window.button)
     if (intersects.length > 0) {
@@ -431,12 +421,12 @@ document.addEventListener('mousemove', (event) => {
 })
 
 window.addEventListener('keydown', camAnimate)
-window.addEventListener('click', buttonClk)
+window.addEventListener('click', clickButton)
 
 function render(){
-    control.update()
     requestAnimationFrame(render)
     renderer.render(scene,currentCamera)
+    control.update()
 }
 
 window.onload = function(){
