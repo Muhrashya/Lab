@@ -36,7 +36,7 @@ function createSpot3(){
 }
 
 function createPlane(){
-    const geometry = new THREE.PlaneGeometry(1000,1000,150)
+    const geometry = new THREE.PlaneGeometry(1000,1000)
     const material = new THREE.MeshStandardMaterial({
         color: "#8c3b0c"
     })
@@ -221,7 +221,6 @@ function buttonBox(){
     mesh.rotation.set(0, -Math.PI/6, 0)
     mesh.castShadow = true
     mesh.receiveShadow = true
-    
     scene.add(mesh)
 }
 
@@ -234,19 +233,18 @@ function buttonClick(){
         mesh.position.set(-46, 3, 63)
         mesh.castShadow = true
         mesh.receiveShadow = true
-        
         scene.add(mesh)
         return mesh
     }
 
-    function createText(){
+function createText(){
         const loader = new FontLoader()
         loader.load('./three.js/examples/fonts/helvetiker_bold.typeface.json',
         function (font1){
             const geometry = new TextGeometry('Click Me!',{
                 font:font1,
                 size:7,
-                height:9
+                height:7
             })
             const material = [
                 new THREE.MeshPhongMaterial({
@@ -262,7 +260,6 @@ function buttonClick(){
             mesh.rotation.set(0, Math.PI*3 + 1, 0)
             mesh.castShadow = true
             mesh.receiveShadow = true
-            
             scene.add(mesh)
             return mesh
         })
@@ -276,7 +273,6 @@ function balonUdara(){
     function(gltf) {
         const model = gltf.scene
         model.scale.setScalar(1/11)
-        model.position.y = 1
         gltf.scene.traverse( function (node) {
             if (node.isMesh || node.isLight) node.castShadow = true;
             if (node.isMesh || node.isLight) node.receiveShadow = true;
@@ -370,7 +366,11 @@ function init(){
     createTire5()
     createPole1()
     createPole2()
+
     buttonBox()
+    var button = buttonClick()
+        window.button = button
+
     balonUdara()
     createText()
     ambientLight()
@@ -379,8 +379,6 @@ function init(){
     createSpot3()
     createSkybox()
     
-    var button = buttonClick()
-        window.button = button
 }
 
 function camAnimate(event){
